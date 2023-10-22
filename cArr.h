@@ -1,6 +1,16 @@
 #pragma once
 #include <ostream>
 
+class cArrException : public std::exception {
+public:
+    cArrException(const char* message) : message(message) {}
+    const char* what() const throw() {
+        return message;
+    }
+private:
+    const char* message;
+};
+
 template<class T>
 class cArr
 {
@@ -282,7 +292,7 @@ template<class T>
 void cArr<T>::pop()
 {
 	if (!this->Size)
-		throw std::exception("cArr: cannot pop() an empty array");
+		throw cArrException("cArr: cannot pop() an empty array");
 
 	--(this->Size);
 	this->init(this->Size);
@@ -292,7 +302,7 @@ template<class T>
 void cArr<T>::pop(const int& n)
 {
 	if (n > this->Size)
-		throw std::exception("cArr: pop() out of range");
+		throw cArrException("cArr: pop() out of range");
 	this->Size -= n;
 	this->init(this->Size);
 }
@@ -321,7 +331,7 @@ template<class T>
 void cArr<T>::erase(const int idx, int len)
 {
 	if (idx < 0 || idx > this->Size)
-		throw std::exception("cArr::erase: invalid index");
+		throw cArrException("cArr::erase: invalid index");
 
 	cArr<T> tmpArr;
 	for (int i = 0; i < idx; i++)
@@ -400,7 +410,7 @@ template<class T>
 T& cArr<T>::operator[](const int i)
 {
 	if (i < -this->Size || i >= this->Size)
-		throw std::exception("cArr: index out of range");
+		throw cArrException("cArr: index out of range");
 
 	if (i >= -this->Size && i < 0)
 		return *this->arr[this->Size + i];
@@ -412,7 +422,7 @@ template<class T>
 T cArr<T>::operator[](const int i) const
 {
 	if (i < -this->Size || i >= this->Size)
-		throw std::exception("cArr: index out of range");
+		throw cArrException("cArr: index out of range");
 
 	if (i >= -this->Size && i < 0)
 		return *this->arr[this->Size + i];
@@ -455,3 +465,4 @@ std::ostream& operator <<(std::ostream& os, const cArr<cArr<U>>& rhs) {
 	}
 	return os;
 }
+
