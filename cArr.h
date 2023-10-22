@@ -60,7 +60,7 @@ public:
 	bool has(T obj);
 	bool has(T *obj);
 	template <class L>
-	bool has(const std::initializer_list<L> list);
+	bool hasAny(const std::initializer_list<L> list);
 
 	cArr<T> &operator=(const cArr<T> &rhs);
 
@@ -356,22 +356,22 @@ void cArr<T>::erase(const int idx, int len)
 }
 
 template <class T>
-inline bool cArr<T>::has(T obj)
+inline bool cArr<T>::has(T e)
 {
 	for (size_t i = 0; i < this->Size; i++)
 	{
-		if (*arr[i] == obj)
+		if (*arr[i] == e)
 			return true;
 	}
 	return false;
 }
 
 template <class T>
-inline bool cArr<T>::has(T *obj)
+inline bool cArr<T>::has(T *e)
 {
 	for (size_t i = 0; i < this->Size; i++)
 	{
-		if (*arr[i] == *obj)
+		if (*arr[i] == *e)
 			return true;
 	}
 	return false;
@@ -379,13 +379,15 @@ inline bool cArr<T>::has(T *obj)
 
 template <class T>
 template <class L>
-bool cArr<T>::has(const std::initializer_list<L> list)
+bool cArr<T>::hasAny(const std::initializer_list<L> list)
 {
-	cArr<L> obj = list;
-	for (size_t i = 0; i < this->Size; i++)
+	for(auto& e : list)
 	{
-		if (*arr[i] == obj)
-			return true;
+		for(size_t i = 0; i < this->Size; i++)
+		{
+			if(*this->arr[i] == e)
+				return true;
+		}
 	}
 	return false;
 }
